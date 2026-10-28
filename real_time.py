@@ -21,7 +21,7 @@ current_word = ""               # Menyimpan kalimat/kata yang sedang dirangkai
 last_predicted_char = ""        # Huruf yang sedang dideteksi saat ini
 hold_start_time = None          # Waktu awal saat jari mulai ditahan
 HOLD_DURATION = 2.0             # Durasi tahan dalam detik (bisa diubah jadi 2-5 detik)
-CONFIDENCE_THRESHOLD = 0.30     # Batas minimum keyakinan model
+CONFIDENCE_THRESHOLD = 0.10     # Batas minimum keyakinan model
 # ==========================================
 
 while cap.isOpened():
