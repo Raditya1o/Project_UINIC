@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - Sibsku</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="profile.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <a href="dashboard.html" class="flex items-center gap-2.5 no-underline">
+        <div class="logo-mark">S</div>
+        <span class="logo-text">Sibsku</span>
+      </a>
+
+      <div class="desktop-nav flex items-center gap-8">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="videochat.html" class="nav-link">Video Chat</a>
+        <a href="profile.html" class="nav-link active">Settings</a>
+      </div>
+
+      <div class="desktop-nav flex items-center gap-2">
+        <button class="btn-outline" onclick="window.location.href='dashboard.html'">
+          Back
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== SETTINGS ===== -->
+  <section class="relative px-6" style="padding-top: 3rem; padding-bottom: 5rem;">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Header -->
+      <div class="mb-10">
+        <p class="section-label">Settings</p>
+        <h1 class="text-display mb-4">Profile & Preferences</h1>
+        <p style="color: var(--text-2); font-size: 1.0625rem; line-height: 1.75;">
+          Customize your experience and accessibility settings
+        </p>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="card" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">Profile Information</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div>
+            <label class="form-label" for="display-name">Display Name</label>
+            <input class="form-input" id="display-name" type="text" value="Rayhan Pratama">
+          </div>
+
+          <div>
+            <label class="form-label" for="email-address">Email Address</label>
+            <input class="form-input" id="email-address" type="email" value="rayhan@example.com" disabled style="background: var(--bg-subtle); opacity: 0.6;">
+            <p style="font-size: 0.8125rem; color: var(--text-3); margin-top: 0.375rem;">Email cannot be changed</p>
+          </div>
+
+          <div>
+            <label class="form-label" for="country-select">Country</label>
+            <select class="form-input" id="country-select">
+              <option>Indonesia</option>
+              <option>United States</option>
+              <option>Japan</option>
+              <option>United Kingdom</option>
+              <option>Brazil</option>
+              <option>France</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign Language Settings -->
+      <div class="card" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">Sign Language Settings</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div>
+            <label class="form-label">Primary Sign Language</label>
+            <div class="tab-bar">
+              <button class="tab-btn active" id="lang-asl" onclick="selectLanguage('asl')">ASL</button>
+              <button class="tab-btn" id="lang-bsl" onclick="selectLanguage('bsl')">BSL</button>
+              <button class="tab-btn" id="lang-is" onclick="selectLanguage('is')">IS</button>
+              <button class="tab-btn" id="lang-lsf" onclick="selectLanguage('lsf')">LSF</button>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--text-2); margin-top: 0.5rem;">
+              ASL: American Sign Language • BSL: British Sign Language • IS: International Sign • LSF: Langue des Signes Française
+            </p>
+          </div>
+
+          <div class="setting-row" style="padding: 1rem; background: var(--bg-raised); border-radius: var(--r-md);">
+            <div style="flex: 1;">
+              <p style="font-weight: 500; margin-bottom: 0.25rem;">Auto-Speech Synthesis</p>
+              <p style="font-size: 0.8125rem; color: var(--text-2);">Automatically speak translated text to your partner</p>
+            </div>
+            <button class="settings-toggle on" id="toggle-speech" onclick="toggleSetting('speech')"></button>
+          </div>
+
+          <div class="setting-row" style="padding: 1rem; background: var(--bg-raised); border-radius: var(--r-md);">
+            <div style="flex: 1;">
+              <p style="font-weight: 500; margin-bottom: 0.25rem;">Real-time Captions</p>
+              <p style="font-size: 0.8125rem; color: var(--text-2);">Show captions for partner's speech</p>
+            </div>
+            <button class="settings-toggle on" id="toggle-captions" onclick="toggleSetting('captions')"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caption Preferences -->
+      <div class="card" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">Caption Preferences</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div>
+            <label class="form-label">Caption Size</label>
+            <div class="tab-bar">
+              <button class="tab-btn" id="size-small" onclick="selectSize('small')">Small</button>
+              <button class="tab-btn" id="size-medium" onclick="selectSize('medium')">Medium</button>
+              <button class="tab-btn active" id="size-large" onclick="selectSize('large')">Large</button>
+              <button class="tab-btn" id="size-xlarge" onclick="selectSize('xlarge')">X-Large</button>
+            </div>
+          </div>
+
+          <div class="setting-row" style="padding: 1rem; background: var(--bg-raised); border-radius: var(--r-md);">
+            <div style="flex: 1;">
+              <p style="font-weight: 500; margin-bottom: 0.25rem;">High Contrast Mode</p>
+              <p style="font-size: 0.8125rem; color: var(--text-2);">Increase caption contrast for better visibility</p>
+            </div>
+            <button class="settings-toggle" id="toggle-contrast" onclick="toggleSetting('contrast')"></button>
+          </div>
+
+          <!-- Preview -->
+          <div style="background: var(--bg-subtle); padding: 1.5rem; border-radius: var(--r-md); border-left: 3px solid var(--accent);">
+            <p style="font-size: 0.75rem; color: var(--text-3); margin-bottom: 0.5rem;">CAPTION PREVIEW</p>
+            <p id="caption-preview" style="font-size: 1.125rem; font-weight: 500; line-height: 1.6;">
+              "This is how your captions will appear during conversations"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy -->
+      <div class="card" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">Privacy</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="setting-row" style="padding: 1rem; background: var(--bg-raised); border-radius: var(--r-md);">
+            <div style="flex: 1;">
+              <p style="font-weight: 500; margin-bottom: 0.25rem;">Show Location</p>
+              <p style="font-size: 0.8125rem; color: var(--text-2);">Share your country with conversation partners</p>
+            </div>
+            <button class="settings-toggle on" id="toggle-location" onclick="toggleSetting('location')"></button>
+          </div>
+
+          <div class="setting-row" style="padding: 1rem; background: var(--bg-raised); border-radius: var(--r-md);">
+            <div style="flex: 1;">
+              <p style="font-weight: 500; margin-bottom: 0.25rem;">Save Conversation History</p>
+              <p style="font-size: 0.8125rem; color: var(--text-2);">Keep a log of your past conversations</p>
+            </div>
+            <button class="settings-toggle on" id="toggle-history" onclick="toggleSetting('history')"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn btn-primary btn-lg" onclick="saveSettings()">
+          Save Changes
+        </button>
+        <button class="btn btn-secondary btn-lg" onclick="resetSettings()">
+          Reset to Defaults
+        </button>
+        <button class="btn btn-ghost btn-lg" onclick="if(confirm('Sign out?')) window.location.href='index.html'">
+          Sign Out
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="px-6 py-8" style="border-top: 1px solid var(--border);">
+    <div class="max-w-6xl mx-auto text-center">
+      <p style="font-size:0.8125rem; color:var(--text-3);">© 2026 Sibsku. All settings are saved locally.</p>
+    </div>
+  </footer>
+
+  <script>
+    let currentLanguage = 'asl';
+    let currentSize = 'large';
+    let settings = {
+      speech: true,
+      captions: true,
+      contrast: false,
+      location: true,
+      history: true
+    };
+
+    function selectLanguage(lang) {
+      currentLanguage = lang;
+      ['asl', 'bsl', 'is', 'lsf'].forEach(l => {
+        document.getElementById('lang-' + l).classList.remove('active');
+      });
+      document.getElementById('lang-' + lang).classList.add('active');
+    }
+
+    function selectSize(size) {
+      currentSize = size;
+      ['small', 'medium', 'large', 'xlarge'].forEach(s => {
+        document.getElementById('size-' + s).classList.remove('active');
+      });
+      document.getElementById('size-' + size).classList.add('active');
+      
+      // Update preview size
+      const preview = document.getElementById('caption-preview');
+      const sizes = { small: '0.875rem', medium: '1rem', large: '1.125rem', xlarge: '1.25rem' };
+      preview.style.fontSize = sizes[size];
+    }
+
+    function toggleSetting(setting) {
+      settings[setting] = !settings[setting];
+      const toggle = document.getElementById('toggle-' + setting);
+      if (settings[setting]) {
+        toggle.classList.add('on');
+      } else {
+        toggle.classList.remove('on');
+      }
+    }
+
+    function saveSettings() {
+      // In real app, save to backend
+      alert('Settings saved successfully!');
+    }
+
+    function resetSettings() {
+      if (confirm('Reset all settings to default values?')) {
+        location.reload();
+      }
+    }
+  </script>
+
+<script src="app.js"></script>
+</body>
+</html>

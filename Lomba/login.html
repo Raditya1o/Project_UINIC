@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - Sibsku</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="login.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR (sama dengan landing page) ===== -->
+  <nav class="navbar px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 no-underline">
+        <div class="logo-mark">S</div>
+        <span class="logo-text">Sibsku</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="index.html">
+          <button class="btn-outline" style="padding: 0.5rem 1.125rem; font-size: 0.875rem;">Back to Home</button>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== LOGIN FORM ===== -->
+  <section class="relative px-6" style="padding-top: 3rem; padding-bottom: 5rem; min-height: calc(100vh - 80px); display: flex; align-items: center;">
+    <div class="max-w-md mx-auto w-full">
+      
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL45zW5qQEJ92yZYnCl185wvfUjNJUmFuGinq3eXbmykmhNIWLznpXht-F_3-Sf67iIEqqjSyxOpxbVzWC3wUjBESIknwPLkUPfhOx6PVH1vjJzTaAdS5Bke9gJ3J5ggbkmz2tXx35nxbmznTWqSv18xprfj-YS9tD8tB1zTT7D8djU0LwaCgO49e2nfkSyPRaq0_tUYJ34n2GmW_d8NiQTBtUcPac76LJdC383nrTfhbvoU1sPCQOT3WggI_48rQyJ7c" alt="Sibsku" class="h-12 w-auto mx-auto object-contain mb-4">
+        <h1 class="text-heading mb-2">Welcome to Sibsku</h1>
+        <p class="text-muted">Sign in to start connecting globally</p>
+      </div>
+
+      <!-- Main Card -->
+      <div class="card" style="padding: 2rem;">
+        
+        <!-- Tabs -->
+        <div class="tab-bar mb-6">
+          <button class="tab-btn active" id="tab-signin" type="button">Sign In</button>
+          <button class="tab-btn" id="tab-register" type="button">Create Account</button>
+        </div>
+
+        <!-- Google SSO -->
+        <div class="w-full mb-4">
+          <button class="btn-social" id="google-btn" type="button">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+              <path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707 0-.593.102-1.167.282-1.707V4.961H.957C.347 6.173 0 7.548 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+        </div>
+
+        <div class="divider" style="margin: 1.5rem 0;">or with email</div>
+
+        <!-- Form -->
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+          
+          <!-- Name field (hidden by default) -->
+          <div class="hidden" id="field-fullname">
+            <label class="form-label" for="fullname-input">Full Name</label>
+            <input class="form-input" id="fullname-input" placeholder="Your name" type="text">
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="form-label" for="email-input">Email Address</label>
+            <input class="form-input" id="email-input" placeholder="name@example.com" required type="email">
+          </div>
+
+          <!-- Password -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.375rem;">
+              <label class="form-label" for="password-input" style="margin: 0;">Password</label>
+              <button class="text-muted hover:text-accent" id="toggle-password" type="button" style="font-size: 0.8125rem; background: none; border: none; cursor: pointer; text-decoration: underline;">
+                Show
+              </button>
+            </div>
+            <input class="form-input" id="password-input" placeholder="Enter your password" required type="password">
+          </div>
+
+          <!-- Remember & Forgot -->
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="remember-device" style="width: 16px; height: 16px; cursor: pointer;">
+              <span class="text-muted">Remember me</span>
+            </label>
+            <a href="#forgot" id="forgot-link" class="text-accent hover:underline">Forgot password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button class="btn btn-primary btn-lg w-full" id="submit-btn" type="submit" style="margin-top: 0.5rem;">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Bottom text -->
+        <p class="text-center text-muted" style="margin-top: 1.5rem; font-size: 0.875rem;">
+          <span id="account-prompt-text">Don't have an account?</span>
+          <button class="text-accent hover:underline font-medium" id="toggle-mode-btn" type="button" style="background: none; border: none; cursor: pointer; margin-left: 0.25rem;">
+            Create one
+          </button>
+        </p>
+      </div>
+
+      <!-- Footer note -->
+      <div class="text-center" style="margin-top: 2rem; color: var(--text-3); font-size: 0.8125rem;">
+        <p>By continuing, you agree to Sibsku's Terms of Service and Privacy Policy</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      var tabSignIn = document.getElementById('tab-signin');
+      var tabRegister = document.getElementById('tab-register');
+      var toggleModeBtn = document.getElementById('toggle-mode-btn');
+      var accountPromptText = document.getElementById('account-prompt-text');
+      var submitBtn = document.getElementById('submit-btn');
+      var fieldFullName = document.getElementById('field-fullname');
+      var forgotLink = document.getElementById('forgot-link');
+      var togglePassword = document.getElementById('toggle-password');
+      var passwordInput = document.getElementById('password-input');
+
+      var isSignIn = true;
+
+      function setMode(signInMode) {
+        isSignIn = signInMode;
+        if (isSignIn) {
+          tabSignIn.classList.add('active');
+          tabRegister.classList.remove('active');
+          fieldFullName.classList.add('hidden');
+          submitBtn.textContent = 'Sign In';
+          accountPromptText.textContent = "Don't have an account?";
+          toggleModeBtn.textContent = 'Create one';
+          forgotLink.style.display = 'inline';
+        } else {
+          tabRegister.classList.add('active');
+          tabSignIn.classList.remove('active');
+          fieldFullName.classList.remove('hidden');
+          submitBtn.textContent = 'Create Account';
+          accountPromptText.textContent = 'Already have an account?';
+          toggleModeBtn.textContent = 'Sign in';
+          forgotLink.style.display = 'none';
+        }
+      }
+
+      tabSignIn.addEventListener('click', function() { setMode(true); });
+      tabRegister.addEventListener('click', function() { setMode(false); });
+      toggleModeBtn.addEventListener('click', function() { setMode(!isSignIn); });
+
+      togglePassword.addEventListener('click', function() {
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          togglePassword.textContent = 'Hide';
+        } else {
+          passwordInput.type = 'password';
+          togglePassword.textContent = 'Show';
+        }
+      });
+
+      // Google SSO
+      document.getElementById('google-btn').addEventListener('click', function() {
+        this.textContent = 'Connecting...';
+        this.disabled = true;
+        setTimeout(function() { window.location.href = 'dashboard.html'; }, 1000);
+      });
+    })();
+
+    function handleAuthSubmit(e) {
+      if (e) e.preventDefault();
+      var btn = document.getElementById('submit-btn');
+      if (btn) { 
+        btn.textContent = 'Signing in...'; 
+        btn.disabled = true; 
+      }
+      setTimeout(function() { window.location.href = 'dashboard.html'; }, 1000);
+    }
+  </script>
+
+<script src="app.js"></script>
+</body>
+</html>
