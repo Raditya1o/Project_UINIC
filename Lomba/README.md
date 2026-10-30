@@ -4,11 +4,12 @@ Website komunikasi video global dengan terjemahan bahasa isyarat real-time mengg
 
 ## Cara Menggunakan
 
+2. Masuk path folder_AI di terminal vscode, lalu jalankan perintah di terminal vscode "uvicorn backend:app --reload"
 1. Buka `index.html` di browser untuk melihat landing page
-2. Klik "Sign In" atau "Get Started" untuk ke halaman login (`login.html`)
-3. Setelah login, Anda akan diarahkan ke dashboard (`dashboard.html`)
-4. Dari dashboard, klik "START FACETIME" untuk memulai video chat (`videochat.html`)
-5. Akses profil dan pengaturan melalui menu (`profile.html`)
+3. Klik "Sign In" atau "Get Started" untuk ke halaman login (`login.html`)
+4. Setelah login, Anda akan diarahkan ke dashboard (`dashboard.html`)
+5. Dari dashboard, klik "START FACETIME" untuk memulai video chat (`videochat.html`)
+6. Akses profil dan pengaturan melalui menu (`profile.html`)
 
 ## Struktur File
 
@@ -34,6 +35,7 @@ Website komunikasi video global dengan terjemahan bahasa isyarat real-time mengg
 - HTML5, CSS3, JavaScript (Vanilla)
 - Tailwind CSS (via CDN)
 - Aurora Design System (custom color palette)
+- FastAPI (API)
 - WebRTC untuk video chat (simulasi)
 
 ## Browser Support
