@@ -1,252 +1,560 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Chat - Sibsku</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="videochat.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    /* Hide navbar during video chat */
-    .navbar.hidden-navbar {
-      display: none;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Chat - Sibsku</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="videochat.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Hide navbar during video chat */
+      .navbar.hidden-navbar {
+        display: none;
+      }
 
-    /* Video chat controls with icons */
-    .video-controls {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 40px;
-      background: rgba(5, 8, 22, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, .16);
-      border-radius: 28px;
-    }
+      /* Video chat controls with icons */
+      .video-controls {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 40px;
+        background: rgba(5, 8, 22, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 28px;
+      }
 
-    .video-controls button {
-      transition: transform .3s;
-    }
+      .video-controls button {
+        transition: transform 0.3s;
+      }
 
-    .video-controls button:hover {
-      transform: scale(1.1);
-    }
+      .video-controls button:hover {
+        transform: scale(1.1);
+      }
 
-    .video-controls button:hover {
-      transform: scale(1.1);
-    }
+      .video-controls button:hover {
+        transform: scale(1.1);
+      }
 
-    .video-controls img {
-      display: block;
-    }
-  </style>
-</head>
-<body>
+      .video-controls img {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== NAVBAR (will be hidden during video chat) ===== -->
+    <nav class="navbar px-6 py-4" id="navbar">
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <a href="dashboard.html" class="flex items-center gap-2.5 no-underline">
+          <div class="logo-mark">S</div>
+          <span class="logo-text">Sibsku</span>
+        </a>
 
-  <!-- ===== NAVBAR (will be hidden during video chat) ===== -->
-  <nav class="navbar px-6 py-4" id="navbar">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <a href="dashboard.html" class="flex items-center gap-2.5 no-underline">
-        <div class="logo-mark">S</div>
-        <span class="logo-text">Sibsku</span>
-      </a>
-
-      <div class="desktop-nav flex items-center gap-8">
-        <a href="dashboard.html" class="nav-link">Dashboard</a>
-        <a href="videochat.html" class="nav-link active">Video Chat</a>
-        <a href="profile.html" class="nav-link">Settings</a>
-      </div>
-
-      <div class="desktop-nav flex items-center gap-2">
-        <button class="btn-outline-danger" onclick="stopCall()">
-          End Call
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ===== VIDEO CHAT ===== -->
-  <section class="relative px-6" style="padding-top: 2rem; padding-bottom: 3rem;">
-    <div class="max-w-7xl mx-auto">
-      
-      <!-- Session Info -->
-      <div class="mb-4" style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem;">Video Chat Session</h1>
-          <p style="color: var(--text-2); font-size: 0.875rem;">
-            Connected with <strong>Marcus from Stockholm</strong>
-          </p>
+        <div class="desktop-nav flex items-center gap-8">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="videochat.html" class="nav-link active">Video Chat</a>
+          <a href="profile.html" class="nav-link">Settings</a>
         </div>
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <span class="status-badge connected">
-            <span class="status-dot"></span>
-            Connected
-          </span>
-          <span style="font-size: 0.875rem; color: var(--text-2);" id="session-timer">00:00</span>
+
+        <div class="desktop-nav flex items-center gap-2">
+          <button class="btn-outline-danger" onclick="stopCall()">
+            End Call
+          </button>
         </div>
       </div>
+    </nav>
 
-      <!-- Video Grid -->
-      <div class="grid lg:grid-cols-3 gap-4 mb-4">
-        
-        <!-- Video Feeds (2 columns) -->
-        <div class="lg:col-span-2" style="display: flex; flex-direction: column; gap: 1rem;">
-          
-          <!-- Partner Video -->
-          <div class="video-container active-border" style="aspect-ratio: 16/9; position: relative;">
-            <div class="video-placeholder" style="height: 100%;">
-              <p style="margin-top: 0.5rem;">Partner Video Feed</p>
-              <p style="font-size: 0.75rem; color: var(--text-3);">Marcus • Stockholm, Sweden</p>
+    <!-- ===== VIDEO CHAT ===== -->
+    <section
+      class="relative px-6"
+      style="padding-top: 2rem; padding-bottom: 3rem"
+    >
+      <div class="max-w-7xl mx-auto">
+        <!-- Session Info -->
+        <div
+          class="mb-4"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <div>
+            <h1
+              style="
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+              "
+            >
+              Video Chat Session
+            </h1>
+            <p style="color: var(--text-2); font-size: 0.875rem">
+              Connected with <strong>Marcus from Stockholm</strong>
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem">
+            <span class="status-badge connected">
+              <span class="status-dot"></span>
+              Connected
+            </span>
+            <span
+              style="font-size: 0.875rem; color: var(--text-2)"
+              id="session-timer"
+              >00:00</span
+            >
+          </div>
+        </div>
+
+        <!-- Video Grid -->
+        <div class="grid lg:grid-cols-3 gap-4 mb-4">
+          <!-- Video Feeds (2 columns) -->
+          <div
+            class="lg:col-span-2"
+            style="display: flex; flex-direction: column; gap: 1rem"
+          >
+            <!-- Partner Video -->
+            <div
+              class="video-container active-border"
+              style="aspect-ratio: 16/9; position: relative"
+            >
+              <div class="video-placeholder" style="height: 100%">
+                <p style="margin-top: 0.5rem">Partner Video Feed</p>
+                <p style="font-size: 0.75rem; color: var(--text-3)">
+                  Marcus • Stockholm, Sweden
+                </p>
+              </div>
+
+              <!-- Overlay Caption -->
+              <div
+                style="
+                  position: absolute;
+                  bottom: 1rem;
+                  left: 1rem;
+                  right: 1rem;
+                  background: rgba(7, 8, 15, 0.95);
+                  border-left: 3px solid var(--accent);
+                  border-radius: var(--r-md);
+                  padding: 0.75rem;
+                "
+              >
+                <p
+                  style="
+                    font-size: 0.7rem;
+                    color: var(--text-3);
+                    margin-bottom: 0.25rem;
+                  "
+                >
+                  LIVE CAPTION
+                </p>
+                <p style="font-weight: 500">
+                  "Hello! Can you see my hands clearly?"
+                </p>
+              </div>
             </div>
-            
-            <!-- Overlay Caption -->
-            <div style="position: absolute; bottom: 1rem; left: 1rem; right: 1rem; background: rgba(7, 8, 15, 0.95); border-left: 3px solid var(--accent); border-radius: var(--r-md); padding: 0.75rem;">
-              <p style="font-size: 0.7rem; color: var(--text-3); margin-bottom: 0.25rem;">LIVE CAPTION</p>
-              <p style="font-weight: 500;">"Hello! Can you see my hands clearly?"</p>
+
+            <!-- Your Video -->
+            <div
+              class="video-container"
+              style="aspect-ratio: 16/9; position: relative; background: black"
+            >
+              <!-- Elemen Video Kamera -->
+              <video
+                id="webcam"
+                autoplay
+                playsinline
+                style="width: 100%; height: 100%; object-fit: cover; transform:scaleX(-1);"
+              ></video>
+
+              <!-- Canvas Tersembunyi untuk Proses AI -->
+              <canvas
+                id="canvas"
+                width="640"
+                height="480"
+                style="display: none"
+              ></canvas>
+
+              <!-- AI Status Overlay -->
+              <div style="position: absolute; top: 1rem; left: 1rem">
+                <span class="ai-status detecting">
+                  <span class="status-dot"></span>
+                  AI Detecting
+                </span>
+              </div>
+
+              <!-- Translation Overlay (Hasil Huruf dari AI Python-mu) -->
+              <div
+                style="
+                  position: absolute;
+                  bottom: 1rem;
+                  left: 1rem;
+                  right: 1rem;
+                  background: rgba(7, 8, 15, 0.95);
+                  border-left: 3px solid var(--green);
+                  border-radius: var(--r-md);
+                  padding: 0.75rem;
+                "
+              >
+                <p
+                  style="
+                    font-size: 0.7rem;
+                    color: var(--green);
+                    margin-bottom: 0.25rem;
+                  "
+                >
+                  SIGN DETECTED
+                </p>
+                <!-- Di sinilah huruf hasil AI Python kamu akan muncul -->
+                <p style="font-weight: 700; font-size: 1.25rem" id="ai-output">
+                  Menunggu tangan...
+                </p>
+                <div style="display: flex; gap: 6px">
+                  <button
+                    type="button"
+                    onclick="tambahSpasi()"
+                    style="
+                      background: #38bdf8;
+                      color: black;
+                      border: none;
+                      padding: 4px 8px;
+                      border-radius: 4px;
+                      font-size: 11px;
+                      font-weight: bold;
+                      cursor: pointer;
+                    "
+                  >
+                    Spasi
+                  </button>
+                  <button
+                    type="button"
+                    onclick="hapusHuruf()"
+                    style="
+                      background: #ef4444;
+                      color: white;
+                      border: none;
+                      padding: 4px 8px;
+                      border-radius: 4px;
+                      font-size: 11px;
+                      font-weight: bold;
+                      cursor: pointer;
+                    "
+                  >
+                    Hapus
+                  </button>
+                  <button
+                    type="button"
+                    onclick="resetKalimat()"
+                    style="
+                      background: #64748b;
+                      color: white;
+                      border: none;
+                      padding: 4px 8px;
+                      border-radius: 4px;
+                      font-size: 11px;
+                      font-weight: bold;
+                      cursor: pointer;
+                    "
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Your Video -->
-          <div class="video-container" style="aspect-ratio: 16/9; position: relative;">
-            <div class="video-placeholder" style="height: 100%;">
-              <p style="margin-top: 0.5rem;">Your Video Feed</p>
-              <p style="font-size: 0.75rem; color: var(--text-3);">Sign Detection: Active</p>
-            </div>
-            
-            <!-- AI Status Overlay -->
-            <div style="position: absolute; top: 1rem; left: 1rem;">
-              <span class="ai-status detecting">
+          <!-- AI Translation Panel (1 column) -->
+          <div
+            class="ai-panel"
+            style="max-height: 800px; display: flex; flex-direction: column"
+          >
+            <div class="ai-panel-header">
+              <span style="font-weight: 600; font-size: 0.875rem"
+                >Live Translation</span
+              >
+              <span class="ai-status detecting" style="margin-top: 0.5rem">
                 <span class="status-dot"></span>
-                AI Detecting
+                Active
               </span>
             </div>
 
-            <!-- Translation Overlay -->
-            <div style="position: absolute; bottom: 1rem; left: 1rem; right: 1rem; background: rgba(7, 8, 15, 0.95); border-left: 3px solid var(--green); border-radius: var(--r-md); padding: 0.75rem;">
-              <p style="font-size: 0.7rem; color: var(--green); margin-bottom: 0.25rem;">SIGN DETECTED (98.4% confidence)</p>
-              <p style="font-weight: 500;">"Yes, crystal clear!"</p>
-            </div>
-          </div>
-        </div>
+            <div
+              style="
+                flex: 1;
+                overflow-y: auto;
+                padding: 0.875rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+              "
+              id="transcript-container"
+            >
+              <!-- Transcript messages -->
+              <div class="translation-bubble">
+                <p style="font-weight: 500; margin-bottom: 0.25rem">
+                  "Hello! Nice to meet you"
+                </p>
+                <p class="timestamp">You • 2 min ago</p>
+              </div>
 
-        <!-- AI Translation Panel (1 column) -->
-        <div class="ai-panel" style="max-height: 800px; display: flex; flex-direction: column;">
-          <div class="ai-panel-header">
-            <span style="font-weight: 600; font-size: 0.875rem;">Live Translation</span>
-            <span class="ai-status detecting" style="margin-top: 0.5rem;">
-              <span class="status-dot"></span>
-              Active
-            </span>
-          </div>
-          
-          <div style="flex: 1; overflow-y: auto; padding: 0.875rem; display: flex; flex-direction: column; gap: 0.75rem;" id="transcript-container">
-            
-            <!-- Transcript messages -->
-            <div class="translation-bubble">
-              <p style="font-weight: 500; margin-bottom: 0.25rem;">"Hello! Nice to meet you"</p>
-              <p class="timestamp">You • 2 min ago</p>
-            </div>
-
-            <div class="translation-bubble" style="background: var(--accent-dim); border-color: rgba(0, 212, 255, 0.2);">
-              <p style="font-weight: 500; margin-bottom: 0.25rem;">"Hi! I can see your signs clearly"</p>
-              <p class="timestamp">Marcus • 2 min ago</p>
-            </div>
-
-            <div class="translation-bubble">
-              <p style="font-weight: 500; margin-bottom: 0.25rem;">"Where are you from?"</p>
-              <p class="timestamp">You • 1 min ago</p>
-            </div>
-
-            <div class="translation-bubble" style="background: var(--accent-dim); border-color: rgba(0, 212, 255, 0.2);">
-              <p style="font-weight: 500; margin-bottom: 0.25rem;">"I'm from Stockholm, Sweden. And you?"</p>
-              <p class="timestamp">Marcus • 1 min ago</p>
-            </div>
-          </div>
-
-          <!-- Text Input -->
-          <div style="padding: 0.875rem; border-top: 1px solid var(--border);">
-            <form id="text-chat-form" onsubmit="sendMessage(event)" style="display: flex; gap: 0.5rem;">
-              <input 
-                type="text" 
-                id="chat-input" 
-                class="form-input" 
-                placeholder="Type a message..." 
-                style="flex: 1; font-size: 0.875rem;"
+              <div
+                class="translation-bubble"
+                style="
+                  background: var(--accent-dim);
+                  border-color: rgba(0, 212, 255, 0.2);
+                "
               >
-              <button type="submit" class="btn btn-primary btn-sm">Send</button>
-            </form>
-          </div>
+                <p style="font-weight: 500; margin-bottom: 0.25rem">
+                  "Hi! I can see your signs clearly"
+                </p>
+                <p class="timestamp">Marcus • 2 min ago</p>
+              </div>
 
-          <!-- Video Controls -->
-          <div style="display: flex; gap: 12px; padding: 0.875rem; border-top: 1px solid var(--border); justify-content: center;">
-            <button id="btn-stop" onclick="stopCall()" title="Stop Call" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; padding: 12px 40px; border-radius: 99px; font-size: 14px; font-weight: 600; cursor: pointer; transition: .3s; box-shadow: 0 8px 24px rgba(239, 68, 68, .3);">
-              Stop
-            </button>
-            <button id="btn-next" onclick="nextPartner()" title="Next Partner" style="background: transparent; color: white; border: 1.5px solid rgba(255,255,255,.3); padding: 12px 40px; border-radius: 99px; font-size: 14px; font-weight: 600; cursor: pointer; transition: .3s;">
-              Next
-            </button>
+              <div class="translation-bubble">
+                <p style="font-weight: 500; margin-bottom: 0.25rem">
+                  "Where are you from?"
+                </p>
+                <p class="timestamp">You • 1 min ago</p>
+              </div>
+
+              <div
+                class="translation-bubble"
+                style="
+                  background: var(--accent-dim);
+                  border-color: rgba(0, 212, 255, 0.2);
+                "
+              >
+                <p style="font-weight: 500; margin-bottom: 0.25rem">
+                  "I'm from Stockholm, Sweden. And you?"
+                </p>
+                <p class="timestamp">Marcus • 1 min ago</p>
+              </div>
+            </div>
+
+            <!-- Text Input -->
+            <div style="padding: 0.875rem; border-top: 1px solid var(--border)">
+              <form
+                id="text-chat-form"
+                onsubmit="sendMessage(event)"
+                style="display: flex; gap: 0.5rem"
+              >
+                <input
+                  type="text"
+                  id="chat-input"
+                  class="form-input"
+                  placeholder="Type a message..."
+                  style="flex: 1; font-size: 0.875rem"
+                />
+                <button type="submit" class="btn btn-primary btn-sm">
+                  Send
+                </button>
+              </form>
+            </div>
+
+            <!-- Video Controls -->
+            <div
+              style="
+                display: flex;
+                gap: 12px;
+                padding: 0.875rem;
+                border-top: 1px solid var(--border);
+                justify-content: center;
+              "
+            >
+              <button
+                id="btn-stop"
+                onclick="stopCall()"
+                title="Stop Call"
+                style="
+                  background: linear-gradient(135deg, #ef4444, #dc2626);
+                  color: white;
+                  border: none;
+                  padding: 12px 40px;
+                  border-radius: 99px;
+                  font-size: 14px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: 0.3s;
+                  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+                "
+              >
+                Stop
+              </button>
+              <button
+                id="btn-next"
+                onclick="nextPartner()"
+                title="Next Partner"
+                style="
+                  background: transparent;
+                  color: white;
+                  border: 1.5px solid rgba(255, 255, 255, 0.3);
+                  padding: 12px 40px;
+                  border-radius: 99px;
+                  font-size: 14px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: 0.3s;
+                "
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <script>
+      // Hide navbar on page load
+      window.addEventListener("load", () => {
+        document.getElementById("navbar").classList.add("hidden-navbar");
+      });
 
-  <script>
-    // Hide navbar on page load
-    window.addEventListener('load', () => {
-      document.getElementById('navbar').classList.add('hidden-navbar');
-    });
+      // Session Timer
+      let seconds = 0;
+      setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        document.getElementById("session-timer").textContent =
+          `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+      }, 1000);
 
-    // Session Timer
-    let seconds = 0;
-    setInterval(() => {
-      seconds++;
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      document.getElementById('session-timer').textContent = 
-        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    }, 1000);
-
-    function stopCall() {
-      if (confirm('End this call?')) {
-        window.location.href = 'dashboard.html';
+      function stopCall() {
+        if (confirm("End this call?")) {
+          window.location.href = "dashboard.html";
+        }
       }
-    }
 
-    function nextPartner() {
-      if (confirm('Connect to the next available partner?')) {
-        location.reload();
+      function nextPartner() {
+        if (confirm("Connect to the next available partner?")) {
+          location.reload();
+        }
       }
-    }
 
-    function sendMessage(e) {
-      e.preventDefault();
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if (!text) return;
+      function sendMessage(e) {
+        e.preventDefault();
+        const input = document.getElementById("chat-input");
+        const text = input.value.trim();
+        if (!text) return;
 
-      const container = document.getElementById('transcript-container');
-      const bubble = document.createElement('div');
-      bubble.className = 'translation-bubble';
-      bubble.innerHTML = `
+        const container = document.getElementById("transcript-container");
+        const bubble = document.createElement("div");
+        bubble.className = "translation-bubble";
+        bubble.innerHTML = `
         <p style="font-weight: 500; margin-bottom: 0.25rem;">"${text}"</p>
         <p class="timestamp">You • Just now</p>
       `;
-      container.appendChild(bubble);
-      container.scrollTop = container.scrollHeight;
-      input.value = '';
-    }
-  </script>
+        container.appendChild(bubble);
+        container.scrollTop = container.scrollHeight;
+        input.value = "";
+      }
 
-<script src="app.js"></script>
-</body>
+      const video = document.getElementById("webcam");
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      const outputDiv = document.getElementById("ai-output");
+
+      let kalimatTerbentuk = "";
+      let hurufSebelumnya = "";
+      let waktuMulaiTahan = null;
+      const DURASI_TAHAN = 1.5;
+
+      // Fungsi Kontrol Tambahan untuk Kalimat
+      function tambahSpasi() {
+        kalimatTerbentuk += " ";
+        perbaruiTampilanKalimat();
+      }
+
+      function hapusHuruf() {
+        kalimatTerbentuk = kalimatTerbentuk.slice(0, -1);
+        perbaruiTampilanKalimat();
+      }
+
+      function resetKalimat() {
+        kalimatTerbentuk = "";
+        perbaruiTampilanKalimat();
+      }
+
+      function perbaruiTampilanKalimat() {
+        // Menampilkan kalimat yang tersimpan di elemen UI
+        outputDiv.textContent = kalimatTerbentuk
+          ? kalimatTerbentuk
+          : "Tunjukkan isyarat...";
+      }
+
+      // Mengaktifkan webcam di browser
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((err) => {
+          console.error("Gagal mengakses webcam: ", err);
+        });
+
+      // Kirim frame ke backend FastAPI setiap 200ms (5 frame per detik)
+      setInterval(async () => {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob(
+            async (blob) => {
+              const formData = new FormData();
+              formData.append("file", blob, "frame.jpg");
+
+              try {
+                const response = await fetch("http://127.0.0.1:8000/predict", {
+                  method: "POST",
+                  body: formData,
+                });
+
+                const data = await response.json();
+                if (data.status === "success" && data.letter) {
+                  let hurufDetected = data.letter;
+                   outputDiv.innerText = `Huruf: ${data.letter} | ${data.message}`;
+                  // Logika Tahan Huruf (Menyimpan otomatis jika stabil selama DURASI_TAHAN)
+                  if (hurufDetected === hurufSebelumnya) {
+                    if (!waktuMulaiTahan) {
+                      waktuMulaiTahan = Date.now();
+                    } else {
+                      let waktuBerjalan = (Date.now() - waktuMulaiTahan) / 1000;
+
+                      if (waktuBerjalan >= DURASI_TAHAN) {
+                        if (!kalimatTerbentuk.endsWith(hurufDetected)) {
+                          kalimatTerbentuk += hurufDetected;
+                          perbaruiTampilanKalimat(); // Update teks kalimat di layar
+                        }
+                        waktuMulaiTahan = null; // Reset timer setelah tersimpan
+                      }
+                    }
+                  } else {
+                    // Jika huruf berubah, reset timer untuk huruf baru
+                    hurufSebelumnya = hurufDetected;
+                    waktuMulaiTahan = Date.now();
+                  }
+                }
+              } catch (error) {
+                console.error("Gagal terhubung ke backend AI:", error);
+              }
+            },
+            "image/jpeg",
+            0.7,
+          );
+        }
+      }, 200);
+    </script>
+
+    <script src="app.js"></script>
+  </body>
 </html>
